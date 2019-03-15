@@ -9,18 +9,20 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table
-public class Question {
+public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
-    private String title;
     @NotNull
     private String description;
     @NotNull
     private LocalDateTime createdOn = LocalDateTime.now();
     @NotNull
     private LocalDateTime lastUpdatedOn = LocalDateTime.now();
+    @ManyToOne
+    @JoinColumn
+    @NotNull
+    private Question question;
     @OneToOne
     @JoinColumn
     @NotNull
