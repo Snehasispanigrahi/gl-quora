@@ -1,6 +1,5 @@
 package com.greatlearning.quora.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -15,7 +14,6 @@ public class UserProfile {
     private Long id;
     @NotNull
     private String email;
-    @JsonIgnore
     @NotNull
     private String password;
     private String name;

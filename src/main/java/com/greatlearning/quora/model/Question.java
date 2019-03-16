@@ -21,7 +21,7 @@ public class Question {
     private LocalDateTime createdOn = LocalDateTime.now();
     @NotNull
     private LocalDateTime lastUpdatedOn = LocalDateTime.now();
-    @OneToOne
+    @ManyToOne
     @JoinColumn
     @NotNull
     private UserProfile userProfile;

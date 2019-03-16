@@ -23,7 +23,7 @@ public class Answer {
     @JoinColumn
     @NotNull
     private Question question;
-    @OneToOne
+    @ManyToOne
     @JoinColumn
     @NotNull
     private UserProfile userProfile;
