@@ -1,35 +1,56 @@
 package com.greatlearning.quora.controller;
 
-import com.greatlearning.quora.dto.QuestionDTO;
 import com.greatlearning.quora.error.EntityNotFoundException;
+import com.greatlearning.quora.mapper.QuestionMapper;
 import com.greatlearning.quora.model.Question;
+import com.greatlearning.quora.model.dto.QuestionDTO;
 import com.greatlearning.quora.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 public class QuestionController {
     @Autowired
-    QuestionService questionService;
-    /*getAllQuestions
-    getAQuestion
-    addQuestion
-    updateQuestion*/
+    private QuestionService questionService;
 
-    @RequestMapping(value = "/questions", method = RequestMethod.GET)
-    public List<QuestionDTO> getAllQuestions() {
-        return this.questionService.findAll();
+    @Autowired
+    private QuestionMapper questionMapper;
+
+    @GetMapping(value = "/question/all")
+    public ResponseEntity<List<QuestionDTO>> getAllQuestions() {
+        List<Question> questionList = questionService.getAllQuestion();
+
+        List<QuestionDTO> questionDTOS = questionMapper.fromQuestionList(questionList);
+
+        return new ResponseEntity<>(questionDTOS, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/question/{questionId}", method = RequestMethod.GET)
-    public QuestionDTO getAQuestion(@PathVariable Long questionId) throws EntityNotFoundException {
-        return this.questionService.findById(questionId).orElseThrow(() -> new EntityNotFoundException(Question.class, "questionId", questionId.toString()));
+    @GetMapping(value = "/question/{questionId}")
+    public ResponseEntity<QuestionDTO> getAQuestion(@PathVariable Long questionId) throws EntityNotFoundException {
+        Optional<Question> question = questionService.getQuestion(questionId);
+        return new ResponseEntity<>(questionMapper.fromQuestion(question.get()), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/question/create")
+    public ResponseEntity<QuestionDTO> createQuestion(@RequestBody @Valid QuestionDTO questionDTO) {
+        Question question = questionMapper.toQuestion(questionDTO);
+        question.setCreatedOn(LocalDateTime.now());
+        question = questionService.createQuestion(question);
+        return new ResponseEntity<>(questionMapper.fromQuestion(question), HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/question/edit/{questionId}")
+    public ResponseEntity<QuestionDTO> editQuestion(@RequestBody @Valid QuestionDTO questionDTO) throws EntityNotFoundException {
+        Question question = questionService.updateQuestion(questionMapper.toQuestion(questionDTO));
+        return new ResponseEntity<>(questionMapper.fromQuestion(question), HttpStatus.OK);
     }
 }
