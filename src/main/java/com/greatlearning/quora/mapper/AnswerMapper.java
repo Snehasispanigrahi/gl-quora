@@ -1,16 +1,18 @@
 package com.greatlearning.quora.mapper;
 
-import com.greatlearning.quora.dto.AnswerDTO;
 import com.greatlearning.quora.model.Answer;
+import com.greatlearning.quora.model.dto.AnswerDTO;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper
 public interface AnswerMapper {
-    Answer toAnswer(AnswerDTO AnswerDTO, @MappingTarget Answer Answer);
+    AnswerMapper INSTANCE = Mappers.getMapper(AnswerMapper.class);
+
+    Answer toAnswer(AnswerDTO AnswerDTO);
 
     @InheritInverseConfiguration
     AnswerDTO fromAnswer(Answer Answer);
