@@ -1,16 +1,17 @@
 package com.greatlearning.quora.service;
 
-import com.greatlearning.quora.dto.QuestionDTO;
+import com.greatlearning.quora.error.EntityNotFoundException;
+import com.greatlearning.quora.model.Question;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface QuestionService {
-    List<QuestionDTO> findAll();
+    List<Question> getAllQuestion();
 
-    QuestionDTO create(QuestionDTO questionDTO);
+    Question createQuestion(Question question);
 
-    QuestionDTO update(QuestionDTO questionDTO);
+    Question updateQuestion(Question question) throws EntityNotFoundException;
 
-    Optional<QuestionDTO> findById(Long questionDTOId);
+    Optional<Question> getQuestion(Long questionId) throws EntityNotFoundException;
 }

@@ -1,7 +1,6 @@
 package com.greatlearning.quora.service.impl;
 
-import com.greatlearning.quora.dto.QuestionDTO;
-import com.greatlearning.quora.mapper.QuestionMapper;
+import com.greatlearning.quora.error.EntityNotFoundException;
 import com.greatlearning.quora.model.Question;
 import com.greatlearning.quora.repository.QuestionRepository;
 import com.greatlearning.quora.service.QuestionService;
@@ -13,36 +12,35 @@ import java.util.Optional;
 @Service
 public class QuestionServiceImpl implements QuestionService {
     private final QuestionRepository questionRepository;
-    private final QuestionMapper questionMapper;
 
-    public QuestionServiceImpl(QuestionRepository questionRepository, QuestionMapper questionMapper) {
+    public QuestionServiceImpl(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
-        this.questionMapper = questionMapper;
     }
 
     @Override
-    public List<QuestionDTO> findAll() {
+    public List<Question> getAllQuestion() {
         List<Question> questionList = questionRepository.findAll();
-        List<QuestionDTO> questionDTOList = questionMapper.fromQuestionList(questionList);
-        return questionDTOList;
+        return questionList;
     }
 
     @Override
-    public QuestionDTO create(QuestionDTO questionDTO) {
-        Question question = questionMapper.toQuestion(questionDTO);
-        question.setUserProfile(null);
-        questionRepository.save(question);
-        return questionMapper.fromQuestion(question);
+    public Question createQuestion(Question question) {
+//        question.setUserProfile(null);
+        return questionRepository.save(question);
     }
 
     @Override
-    public QuestionDTO update(QuestionDTO questionDTO) {
-        Question question = questionMapper.toQuestion(questionDTO);
-        return null;
+    public Question updateQuestion(Question questionRequest) throws EntityNotFoundException {
+        Optional<Question> question = getQuestion(questionRequest.getId());
+        return questionRepository.save(question.get());
     }
 
     @Override
-    public Optional<QuestionDTO> findById(Long questionDTOId) {
-        return Optional.empty();
+    public Optional<Question> getQuestion(Long questionId) throws EntityNotFoundException {
+        Optional<Question> question = questionRepository.findById(questionId);
+        if (question.isEmpty()) {
+            throw new EntityNotFoundException(Question.class, "id", questionId.toString());
+        }
+        return question;
     }
 }
