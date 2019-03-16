@@ -19,28 +19,23 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public List<Question> getAllQuestion() {
-        List<Question> questionList = questionRepository.findAll();
-        return questionList;
+        return questionRepository.findAll();
     }
 
     @Override
     public Question createQuestion(Question question) {
-//        question.setUserProfile(null);
         return questionRepository.save(question);
     }
 
     @Override
     public Question updateQuestion(Question questionRequest) throws EntityNotFoundException {
-        Optional<Question> question = getQuestion(questionRequest.getId());
-        return questionRepository.save(question.get());
+        Question question = getQuestion(questionRequest.getId());
+        return questionRepository.save(question);
     }
 
     @Override
-    public Optional<Question> getQuestion(Long questionId) throws EntityNotFoundException {
+    public Question getQuestion(Long questionId) throws EntityNotFoundException {
         Optional<Question> question = questionRepository.findById(questionId);
-        if (question.isEmpty()) {
-            throw new EntityNotFoundException(Question.class, "id", questionId.toString());
-        }
-        return question;
+        return question.orElseThrow(() -> new EntityNotFoundException(Question.class, "id", questionId.toString()));
     }
 }
