@@ -14,5 +14,5 @@ public class QuestionDTO {
     @NotNull
     private String description;
     @NotNull
-    private UserProfileDTO userProfileDTO;
+    private UserProfileDTO userProfile;
 }
