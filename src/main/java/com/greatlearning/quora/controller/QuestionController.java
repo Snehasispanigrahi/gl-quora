@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -36,8 +35,8 @@ public class QuestionController {
 
     @GetMapping(value = "/question/{questionId}")
     public ResponseEntity<QuestionDTO> getAQuestion(@PathVariable Long questionId) throws EntityNotFoundException {
-        Optional<Question> question = questionService.getQuestion(questionId);
-        return new ResponseEntity<>(questionMapper.fromQuestion(question.get()), HttpStatus.OK);
+        Question question = questionService.getQuestion(questionId);
+        return new ResponseEntity<>(questionMapper.fromQuestion(question), HttpStatus.OK);
     }
 
     @PostMapping(value = "/question/create")
