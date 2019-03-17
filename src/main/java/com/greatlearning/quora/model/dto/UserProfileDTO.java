@@ -1,19 +1,21 @@
 package com.greatlearning.quora.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.validation.constraints.Size;
 
 @Data
 public class UserProfileDTO {
     @Id
     private Long id;
-    @NotNull
+    @Column(unique = true, nullable = false)
     private String email;
-    @JsonIgnore
-    @NotNull
-    private String password;
     private String name;
+    @Size(min = 4, max = 255, message = "Minimum username length: 4 characters")
+    @Column(unique = true, nullable = false)
+    private String username;
+    @Size(min = 8, message = "Minimum password length: 8 characters")
+    private String password;
 }

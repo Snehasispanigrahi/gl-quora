@@ -1,8 +1,6 @@
 package com.greatlearning.quora.error;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.databind.jsontype.impl.TypeIdResolverBase;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Data
 public class ApiError {
     private HttpStatus status;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
@@ -57,24 +56,6 @@ public class ApiError {
         ApiValidationError(String object, String message) {
             this.object = object;
             this.message = message;
-        }
-    }
-
-    class LowerCaseClassNameResolver extends TypeIdResolverBase {
-
-        @Override
-        public String idFromValue(Object value) {
-            return value.getClass().getSimpleName().toLowerCase();
-        }
-
-        @Override
-        public String idFromValueAndType(Object value, Class<?> suggestedType) {
-            return idFromValue(value);
-        }
-
-        @Override
-        public JsonTypeInfo.Id getMechanism() {
-            return JsonTypeInfo.Id.CUSTOM;
         }
     }
 }
