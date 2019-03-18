@@ -4,11 +4,14 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Data
 @Entity
 @Table
 public class UserProfile {
+    @ElementCollection(fetch = FetchType.EAGER)
+    List<Role> roles;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

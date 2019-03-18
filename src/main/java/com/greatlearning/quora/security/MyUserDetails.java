@@ -26,6 +26,7 @@ public class MyUserDetails implements UserDetailsService {
                 .accountLocked(false)
                 .credentialsExpired(false)
                 .disabled(false)
+                .authorities(userProfile.getRoles())
                 .build();
     }
 }

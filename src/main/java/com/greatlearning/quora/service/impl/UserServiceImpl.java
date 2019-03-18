@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     public String signin(String username, String password) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-            return jwtTokenProvider.createToken(username);
+            return jwtTokenProvider.createToken(username, userProfileRepository.findByUsername(username).getRoles());
         } catch (AuthenticationException ae) {
             throw new GenericException("Invalid credentials", HttpStatus.UNAUTHORIZED);
         }
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
             String encoded = passwordEncoder.encode(userProfile.getPassword());
             userProfile.setPassword(encoded);
             userProfileRepository.save(userProfile);
-            return jwtTokenProvider.createToken(userProfile.getUsername());
+            return jwtTokenProvider.createToken(userProfile.getUsername(), userProfile.getRoles());
         } else {
             throw new GenericException("Username is already in use", HttpStatus.UNPROCESSABLE_ENTITY);
         }
@@ -70,6 +70,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String refresh(String username) {
-        return jwtTokenProvider.createToken(username);
+        return jwtTokenProvider.createToken(username, userProfileRepository.findByUsername(username).getRoles());
     }
 }

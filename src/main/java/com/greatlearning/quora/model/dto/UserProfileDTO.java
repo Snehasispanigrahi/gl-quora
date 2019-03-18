@@ -1,10 +1,12 @@
 package com.greatlearning.quora.model.dto;
 
+import com.greatlearning.quora.model.Role;
 import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Data
 public class UserProfileDTO {
@@ -18,4 +20,5 @@ public class UserProfileDTO {
     private String username;
     @Size(min = 8, message = "Minimum password length: 8 characters")
     private String password;
+    List<Role> roles;
 }

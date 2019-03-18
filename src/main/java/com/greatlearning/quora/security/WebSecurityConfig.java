@@ -11,6 +11,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -20,14 +22,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests()
+        http.
+                csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().exceptionHandling().authenticationEntryPoint(((httpServletRequest, httpServletResponse, e) -> httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED)))
+                .and().authorizeRequests()
                 .antMatchers("/users/signin").permitAll()
                 .antMatchers("/users/signup").permitAll()
-                .anyRequest().authenticated();
-        http.exceptionHandling().accessDeniedPage("/login");
-        http.apply(new JwtTokenFilterConfigurer(jwtTokenProvider));
+                .anyRequest().authenticated()
+                .and().exceptionHandling().accessDeniedPage("/login")
+                .and().apply(new JwtTokenFilterConfigurer(jwtTokenProvider));
     }
 
     @Bean
