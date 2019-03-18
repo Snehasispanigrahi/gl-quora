@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.io.IOException;
 import java.util.Map;
 
 @RestControllerAdvice
@@ -32,14 +31,14 @@ public class GlobalExceptionHandlerController extends ResponseEntityExceptionHan
     }
 
     @ExceptionHandler(GenericException.class)
-    public ResponseEntity<Object> handleCustomException(GenericException ex) throws IOException {
+    public ResponseEntity<Object> handleCustomException(GenericException ex) {
         ApiError apiError = new ApiError(ex.getHttpStatus());
         apiError.setMessage(ex.getMessage());
         return buildResponseEntity(apiError);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex) throws IOException {
+    public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex) {
         ApiError apiError = new ApiError(HttpStatus.FORBIDDEN);
         apiError.setMessage("Access denied");
         apiError.setDebugMessage(ex.getMessage());

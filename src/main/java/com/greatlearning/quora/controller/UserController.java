@@ -33,22 +33,22 @@ public class UserController {
 
     @GetMapping(value = "/{username}")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public UserProfileDTO search(@PathVariable String username) {
-        return profileMapper.fromProfile(userService.searchByUserName(username));
+    public ResponseEntity<UserProfileDTO> search(@PathVariable String username) {
+        UserProfileDTO userProfileDTO = profileMapper.fromProfile(userService.searchByUserName(username));
+        return new ResponseEntity<>(userProfileDTO, HttpStatus.OK);
     }
 
     @GetMapping(value = "/me")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
     public ResponseEntity<UserProfileDTO> whoami(HttpServletRequest req) {
-        System.out.println("req: " + req.getHeader("Authorization"));
         UserProfileDTO userProfileDTO = profileMapper.fromProfile(userService.whoami(req));
         return new ResponseEntity<>(userProfileDTO, HttpStatus.OK);
     }
 
     @GetMapping("/refresh")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public String refresh(HttpServletRequest req) {
-        return userService.refresh(req.getRemoteUser());
+    public ResponseEntity<String> refresh(HttpServletRequest req) {
+        return new ResponseEntity<>(userService.refresh(req.getRemoteUser()), HttpStatus.OK);
     }
 
 }
