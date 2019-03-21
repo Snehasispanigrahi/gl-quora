@@ -56,7 +56,7 @@ public class JwtTokenProvider {
 
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = myUserDetails.loadUserByUsername(getUsername(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "");
+        return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
     }
 
     public String getUsername(String token) {
@@ -76,7 +76,7 @@ public class JwtTokenProvider {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
-            throw new GenericException("Expired or invalid JWT token", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new GenericException("Expired or invalid JWT token", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 }
