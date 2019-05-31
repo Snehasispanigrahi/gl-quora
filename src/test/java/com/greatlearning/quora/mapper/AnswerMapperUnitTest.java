@@ -23,7 +23,7 @@ public class AnswerMapperUnitTest {
         profileDTO = new UserProfileDTO();
         profileDTO.setEmail("pani@gmail.com");
         profileDTO.setName("pani");
-        profileDTO.setPassword("test");
+        profileDTO.setPassword("test@1234");
 
         profile = profileMapper.toProfile(profileDTO);
     }

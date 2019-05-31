@@ -29,9 +29,9 @@ public class QuestionServiceTest {
     @Before
     public void setUp() {
         UserProfile profile = new UserProfile();
-        profile.setName("pani");
+        profile.setUsername("pani");
         profile.setEmail("pani@gmail.com");
-        profile.setPassword("test");
+        profile.setPassword("test@1234");
 
         entityManager.persist(profile);
 

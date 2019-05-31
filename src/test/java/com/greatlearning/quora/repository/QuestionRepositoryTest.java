@@ -25,7 +25,7 @@ public class QuestionRepositoryTest {
     public void setUp() throws Exception {
         profile = new UserProfile();
         profile.setEmail("pani@gmail.com");
-        profile.setName("pani");
+        profile.setUsername("pani");
         profile.setPassword("test");
 
         entityManager.persist(profile);
