@@ -13,6 +13,4 @@ public class QuestionDTO {
     private String title;
     @NotNull
     private String description;
-    @NotNull
-    private UserProfileDTO userProfile;
 }
